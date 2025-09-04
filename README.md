@@ -8,7 +8,7 @@ It’s designed to test how well your friends really know you through a set of p
 ## 🌸 Features
 - 🎀 Cute aesthetic (soft pink & friendly design)  
 - ⏳ Visual timer for each question  
-- 🎉 Special ending screen if you score 10/10  
+- 🎉 Special ending screen if you choose everything right  
 
 ---
 

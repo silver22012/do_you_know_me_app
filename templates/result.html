@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>the end!!</title>
+
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Google Fonts: Yeseva One -->
+<link href="https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap" rel="stylesheet">
+
+<!-- Config Tailwind per Yeseva One -->
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        'yeseva': ['"Yeseva One"', 'cursive']
+      }
+    }
+  }
+}
+</script>
+</head>
+<body class="bg-pink-100 flex items-center justify-center h-screen">
+
+<div class="bg-white rounded-3xl shadow-2xl p-10 w-96 flex flex-col items-center text-center">
+    <h1 class="text-4xl font-yeseva text-pink-600 mb-6">finito! 🎀✨</h1>
+
+    {% if score == total %}
+        <p class="text-2xl font-bold text-pink-500 mb-4">test superato, siamo ancora amici 💖🎉✨</p>
+    {% elif score >= 3 %}
+        <p class="text-xl font-bold text-pink-400 mb-4">potevi fare di meglio..</p>
+    {% elif score >= 2 %}
+        <p class="text-lg font-bold text-pink-300 mb-4">stai scherzando spero!!!</p>
+    {% else %}
+        <p class="text-lg font-bold text-pink-200 mb-4">non mi parlare più</p>
+    {% endif %}
+
+    <p class="text-gray-700 text-lg mb-6">punti: <span class="font-bold">{{ score }}</span> su <span class="font-bold">{{ total }}</span></p>
+
+    <a href="{{ url_for('home') }}">
+        <button class="bg-pink-400 hover:bg-pink-500 text-white font-bold py-3 px-8 rounded-xl shadow-lg transition duration-300">
+        home
+        </button>
+    </a>
+</div>
+
+</body>
+</html>

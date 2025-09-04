@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>question {{ qid }}:</title>
+
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Google Fonts: Yeseva One -->
+<link href="https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap" rel="stylesheet">
+
+<!-- Config Tailwind per Yeseva One -->
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          'yeseva': ['"Yeseva One"', 'cursive']
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+/* Timer animato */
+#timer-bar {
+    transition: width 0.1s linear;
+}
+</style>
+</head>
+<body class="bg-pink-100 flex items-center justify-center h-screen">
+
+<div class="bg-white rounded-3xl shadow-2xl p-8 w-96 flex flex-col items-center text-center relative">
+
+    <!-- Timer -->
+    <div class="w-full h-2 bg-pink-200 rounded-full mb-6">
+        <div id="timer-bar" class="h-2 bg-pink-500 rounded-full w-full"></div>
+    </div>
+
+    <!-- Titolo domanda -->
+    <h2 class="font-yeseva text-2xl text-pink-600 mb-4">question {{ qid }}:</h2>
+
+    <!-- Testo domanda -->
+    <p class="mb-6 text-gray-700">{{ q.text }}</p>
+
+    <!-- Form con opzioni -->
+    <form method="POST" class="w-full flex flex-col items-center">
+        {% for opt in options %}
+        <label class="w-full mb-2 flex items-center bg-pink-50 rounded-lg px-4 py-2 cursor-pointer hover:bg-pink-100">
+            <input type="radio" name="answer" value="{{ opt }}" required class="mr-3">
+            {{ opt }}
+        </label>
+        {% endfor %}
+        <button type="submit" class="mt-4 bg-pink-400 hover:bg-pink-500 text-white font-bold py-3 px-8 rounded-xl shadow-lg transition duration-300">
+            next
+        </button>
+    </form>
+</div>
+
+<script>
+// Timer in secondi
+let duration = 10; // 10 secondi
+let timerBar = document.getElementById('timer-bar');
+let startTime = Date.now();
+
+function updateTimer() {
+    let elapsed = (Date.now() - startTime) / 1000;
+    let percent = Math.max(0, 100 - (elapsed / duration * 100));
+    timerBar.style.width = percent + "%";
+
+    if (elapsed < duration) {
+        requestAnimationFrame(updateTimer);
+    } else {
+        // Quando il timer finisce, invia automaticamente il form
+        document.querySelector('form').submit();
+    }
+}
+
+updateTimer();
+</script>
+
+</body>
+</html>

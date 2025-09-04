@@ -11,7 +11,6 @@
 <!-- Google Fonts: Yeseva One -->
 <link href="https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap" rel="stylesheet">
 
-<!-- Config Tailwind per Yeseva One -->
 <script>
   tailwind.config = {
     theme: {
@@ -25,9 +24,10 @@
 </script>
 
 <style>
-/* Timer animato */
+/* Timer bar transition */
 #timer-bar {
-    transition: width 0.1s linear;
+    height: 0.5rem;
+    transition: width 0.1s linear, background-color 0.3s linear;
 }
 </style>
 </head>
@@ -36,8 +36,11 @@
 <div class="bg-white rounded-3xl shadow-2xl p-8 w-96 flex flex-col items-center text-center relative">
 
     <!-- Timer -->
-    <div class="w-full h-2 bg-pink-200 rounded-full mb-6">
-        <div id="timer-bar" class="h-2 bg-pink-500 rounded-full w-full"></div>
+    <div class="w-full mb-6 flex items-center">
+        <div class="w-full bg-pink-200 rounded-full mr-3">
+            <div id="timer-bar" class="bg-pink-500 rounded-full w-full"></div>
+        </div>
+        <span id="timer-text" class="text-pink-600 font-bold">10s</span>
     </div>
 
     <!-- Titolo domanda -->
@@ -50,7 +53,7 @@
     <form method="POST" class="w-full flex flex-col items-center">
         {% for opt in options %}
         <label class="w-full mb-2 flex items-center bg-pink-50 rounded-lg px-4 py-2 cursor-pointer hover:bg-pink-100">
-            <input type="radio" name="answer" value="{{ opt }}" required class="mr-3">
+            <input type="radio" name="answer" value="{{ opt }}" class="mr-3">
             {{ opt }}
         </label>
         {% endfor %}
@@ -61,21 +64,37 @@
 </div>
 
 <script>
-// Timer in secondi
-let duration = 10; // 10 secondi
+let duration = 10; 
 let timerBar = document.getElementById('timer-bar');
+let timerText = document.getElementById('timer-text');
 let startTime = Date.now();
 
 function updateTimer() {
     let elapsed = (Date.now() - startTime) / 1000;
+    let remaining = Math.max(0, duration - Math.floor(elapsed));
     let percent = Math.max(0, 100 - (elapsed / duration * 100));
+
+    // Aggiorna larghezza barra
     timerBar.style.width = percent + "%";
+
+    // Colore progressivo
+    if (percent > 60) timerBar.style.backgroundColor = "#f472b6"; // rosa
+    else if (percent > 30) timerBar.style.backgroundColor = "#fb923c"; // arancione
+    else timerBar.style.backgroundColor = "#ef4444"; // rosso
+
+    // Testo numerico
+    timerText.textContent = remaining + "s";
 
     if (elapsed < duration) {
         requestAnimationFrame(updateTimer);
     } else {
-        // Quando il timer finisce, invia automaticamente il form
-        document.querySelector('form').submit();
+        // Timer finito
+        let selected = document.querySelector('input[name="answer"]:checked');
+        if (selected) {
+            document.querySelector('form').submit();
+        } else {
+            window.location.href = "{{ url_for('question', qid=qid+1) }}";
+        }
     }
 }
 
